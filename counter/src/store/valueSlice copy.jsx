@@ -4,16 +4,8 @@
 
 // Pour chaque valeur affichée; vous indiquerez si le nombre est pair ou impair. Aidez-vous de la remarque qui suit pour mettre en place cette fonctionnalité.
 
-// Définissez un compteur asynchrone dans une promesse.
-
-// Ajoutez un bouton permettant d'afficher une valeur incrémentée +1 de manière asynchrone en utilisant createAsynchThunk
-
-// Maintenant le délai du compteur est de 500ms; ajoutez à ce compteur la fonctionnalité suivante : 
-// si la valeur du compteur dépasse 10 on incrémente de +2.
-// Et si on atteind 20 on rend inactif le bouton.
-
 // import de la fonction 
-import { configureStore, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { configureStore, createSlice } from '@reduxjs/toolkit'
 
 // définit un state 
 const aleaMax = 10;
@@ -28,59 +20,6 @@ const parityName = {
   odd: "odd"
 }
 
-function delay(number, time) {
-
-  return new Promise((resolve, reject) => {
-      setTimeout(() => {
-          // if (number < 0) {
-          //     reject(`Number < 0, ${number} `)
-
-          //     return;
-          // }
-          // if (number === 10)
-
-          // ce que la promesse retourne comme valeur dans la fonction de callback 
-          resolve(number);
-
-      }, time)
-  });
-}
-
-export const counterAsync = createAsyncThunk(
-  'counterAsync',
-  async (number) => {
-    const num = await delay(number, 500)
-    return num
-  }
-)
-
-export const valueSliceAsync = createSlice({
-  name: 'counter2',
-  initialState : { countA : 0, active: true },
-  reducers: {
-  },
-  extraReducers: (builder) => {
-    builder.addCase(counterAsync.pending, (state, action) => {
-      // todo ?
-      console.log(state)
-    });
-    builder.addCase(counterAsync.fulfilled, (state, action) => {
-      let count = action.payload;
-      if(state.countA + action.payload > 10) {
-          count = 2 * count;
-      }
-
-      if(state.countA + action.payload > 20) {
-        state.active = false
-      }
-      state.countA += count;
-    });
-    builder.addCase(counterAsync.rejected, (state, action) => {
-        // todo ?
-        console.log(state);
-    })
-  },
-})
 const valueSlice = createSlice({
     // clé permettant d'identifier le reducer spécifique 
       name: 'counter',
@@ -136,9 +75,5 @@ const valueSlice = createSlice({
 
     // pour counterSlice le store dans l'arbre React
     export default configureStore({
-      // combine reducer == lorsqu'il y a plusieurs reducers
-      reducer: {
-        c : valueSlice.reducer,
-        ca : valueSliceAsync.reducer
-      }, // passe le state pour lecture dans useSelector
+      reducer: valueSlice.reducer // passe le state pour lecture dans useSelector
   });

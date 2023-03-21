@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { increment } from './store/valueSlice';
+import { increment, counterAsync } from './store/valueSlice';
 import './App.css'
 
 function App() {
@@ -8,7 +8,13 @@ function App() {
   // const dispatch = useDispatch();
   // const { number } = useSelector( state => state );
   const dispatch = useDispatch();
-  const { number, parity } = useSelector( state => state );
+  const { number, parity } = useSelector( state => state.c );
+  const { countA, active } = useSelector( state => state.ca );
+// console.log("countA", countA)
+  // useEffect(() => {
+  //   dispatch(counterAsync(546))
+
+  // }, [])
 
   return (
     <div className="App">
@@ -23,7 +29,9 @@ function App() {
        <div className="card">
         <p>{number}</p>
         <p>{parity}</p>
+        <p>Counter Async {countA}</p>
         <button onClick={() => dispatch(increment(2))}>INCREMENT</button>
+        <button disabled={!active} onClick={() => dispatch(counterAsync(1))}>INCREMENT</button>
       </div>
     </div>
   )
